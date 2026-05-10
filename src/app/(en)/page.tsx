@@ -1,305 +1,199 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import AlphabetGrid from "@/components/AlphabetGrid";
-import ScreenshotStack from "@/components/ScreenshotStack";
-import CexBadge from "@/components/CexBadge";
-import { organizationJsonLd, websiteJsonLd } from "@/lib/structured-data";
+
+type Work = {
+  mark: string;
+  name: string;
+  description: string;
+  href: string;
+};
+
+const works: Work[] = [
+  {
+    mark: "C",
+    name: "Crosscheck",
+    description: "Auto code-review pipelines.",
+    href: "https://github.com/Motivation-Labs/crosscheck",
+  },
+  {
+    mark: "F",
+    name: "Motivation Form",
+    description: "Agent-built forms for feedback and insight.",
+    href: "https://form.gold",
+  },
+  {
+    mark: "K",
+    name: "Motivate Kids",
+    description: "Points, badges, and rewards for family motivation.",
+    href: "https://github.com/Motivation-Labs/motivate-kids",
+  },
+  {
+    mark: "M",
+    name: "Motivation Money",
+    description: "Stablecoin payroll and team treasury.",
+    href: "/money",
+  },
+  {
+    mark: "M",
+    name: "Motivate Me",
+    description: "Personal habit loops.",
+    href: "https://github.com/Motivation-Labs/motivate-me",
+  },
+  {
+    mark: "T",
+    name: "Motivation Team",
+    description: "Onboarding, subscriptions, and team ops.",
+    href: "https://github.com/Motivation-Labs/motivation-team",
+  },
+];
+
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const productLetters = Array.from(new Set(works.map((work) => work.mark))).sort(
+  (left, right) => alphabet.indexOf(left) - alphabet.indexOf(right),
+);
+const firstProductIndex = alphabet.indexOf(productLetters[0]);
+const lastProductIndex = alphabet.indexOf(productLetters[productLetters.length - 1]);
+const topParkingLetters = alphabet.slice(0, firstProductIndex).join(" ");
+const bottomParkingLetters = alphabet.slice(lastProductIndex + 1).join(" ");
+const placeholderLetters = new Map(
+  productLetters.flatMap((letter, index): Array<[string, string]> => {
+    const nextLetter = productLetters[index + 1];
+
+    if (!nextLetter) {
+      return [];
+    }
+
+    const currentIndex = alphabet.indexOf(letter);
+    const nextIndex = alphabet.indexOf(nextLetter);
+
+    if (nextIndex - currentIndex <= 1) {
+      return [];
+    }
+
+    return [
+      [
+        alphabet[Math.floor((currentIndex + nextIndex) / 2)],
+        alphabet.slice(currentIndex + 1, nextIndex).join(" "),
+      ],
+    ];
+  }),
+);
 
 export const metadata: Metadata = {
-  title: "Motivation Labs | AI-Native Software Studio — Stablecoin Payroll, Habit Apps & Team Ops",
+  title: "Motivation Labs | Humans and Agents in Harmony",
   description:
-    "Motivation Labs builds AI-native tools for serious teams and individuals. Stablecoin payroll (Motivation Money), habit formation (Motivate Me), kids' mindset training (Motivate Kids), and team operations (Motivation Team).",
+    "Motivation Labs is an independent home for software products built by a solo founder to serve a human-agent team.",
   alternates: {
     canonical: "/",
     languages: { en: "/", zh: "/zh" },
   },
   openGraph: {
-    title: "Motivation Labs | AI-Native Software Studio",
+    title: "Motivation Labs",
     description:
-      "Building AI-native tools for serious teams: stablecoin payroll, habit formation, kids' education, and team operations.",
+      "An independent home for software products built to help agents work with humans in harmony.",
     type: "website",
     locale: "en_US",
     alternateLocale: "zh_CN",
     images: [{ url: "/og/home.png", width: 1200, height: 630, alt: "Motivation Labs" }],
   },
-  keywords: [
-    "stablecoin payroll",
-    "crypto payroll software",
-    "USDC payments",
-    "AI-native software",
-    "global team payments",
-    "self-custody treasury",
-    "motivation labs",
-  ],
 };
 
 export default function Home() {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify([organizationJsonLd(), websiteJsonLd()]),
-        }}
-      />
-
-      {/* ── Hero ── */}
-      <section className="border-b-2 border-black bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-20 md:py-36">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 border-2 border-black bg-emerald-400 text-black text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <span className="live-dot w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                Motivation Money is live
-              </div>
-              <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-6 md:mb-8 leading-[0.88]">
-                Motivation
-                <br />
-                Labs.
-              </h1>
-              <p className="text-lg md:text-xl text-black/70 max-w-lg leading-relaxed font-medium mb-8 md:mb-10">
-                A lean, AI-native software studio building tools for people who
-                take their lives and work seriously — and for the AI agents that
-                work alongside them.
-              </p>
-              <div className="flex flex-wrap gap-3 md:gap-4">
-                <Link
-                  href="/money"
-                  className="btn-notion bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-md font-black hover:bg-black/80 uppercase tracking-wider text-sm"
-                >
-                  See Motivation Money →
-                </Link>
-                <a
-                  href="#products"
-                  className="btn-notion inline-block bg-white text-black px-6 md:px-8 py-3 md:py-4 rounded-md font-black hover:bg-gray-50 uppercase tracking-wider text-sm border-2 border-black"
-                >
-                  All Products
-                </a>
-              </div>
-            </div>
-
-            {/* Stats panel — visible on all screen sizes */}
-            <div className="border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] md:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-white p-6 md:p-8">
-              <div className="text-[10px] font-black uppercase tracking-[0.25em] text-black/40 mb-4 md:mb-6">
-                Studio At a Glance
-              </div>
-              {/* Mobile: 2×2 grid; Desktop: stacked list */}
-              <div className="grid grid-cols-2 gap-4 md:hidden">
-                {[
-                  { num: "4", label: "Products" },
-                  { num: "1", label: "Live" },
-                  { num: "100%", label: "AI-native" },
-                  { num: "∞", label: "Motivation" },
-                ].map((stat) => (
-                  <div key={stat.label} className="border border-black/10 p-3">
-                    <div className="text-2xl font-black tracking-tighter">{stat.num}</div>
-                    <div className="text-xs font-medium text-notion-gray">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="hidden md:block space-y-6">
-                {[
-                  { num: "4", label: "Products in the ecosystem" },
-                  { num: "1", label: "Live and in production" },
-                  { num: "100%", label: "AI-native from day one" },
-                  { num: "∞", label: "Motivation to build" },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex items-baseline gap-4 border-b border-black/10 pb-5 last:border-0 last:pb-0"
-                  >
-                    <span className="text-4xl font-black tracking-tighter">{stat.num}</span>
-                    <span className="text-sm font-medium text-notion-gray">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+    <main className="ml-page">
+      <section className="ml-section" aria-labelledby="about-title">
+        <h1 id="about-title">About</h1>
+        <div className="ml-copy">
+          <p>
+            Motivation Labs is an independent entity to house the software
+            products I build, mainly to serve{" "}
+            <Link href="https://inductive.network">our team</Link>&apos;s needs.
+            Our team&apos;s mission is to carry out the vision that agents work
+            with humans in harmony.
+          </p>
         </div>
       </section>
 
-      {/* ── A-Z Product Grid ── */}
-      <AlphabetGrid />
-
-      {/* ── Featured: Motivation Money ── */}
       <section
-        className="py-20 md:py-32 border-t-2 border-black bg-[#f2faf5]"
-        id="money"
-        aria-label="Motivation Money"
+        className="ml-section ml-philosophy"
+        aria-labelledby="philosophy-title"
       >
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-            {/* Left */}
-            <div>
-              <div className="flex items-center gap-3 mb-6 md:mb-8 flex-wrap">
-                <Image
-                  src="/images/money/motivation_money_logo.png"
-                  alt="Motivation Money"
-                  width={36}
-                  height={36}
-                  className="object-contain logo-walk"
-                />
-                <div className="inline-block px-4 py-1.5 rounded-md border-2 border-black bg-emerald-400 text-black text-[11px] font-black uppercase tracking-[0.15em] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  M — Motivation Money
-                </div>
-                <span className="flex items-center gap-1.5 px-3 py-1 rounded-md border-2 border-black bg-black text-white text-[10px] font-black uppercase tracking-wider">
-                  <span className="live-dot w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                  Live
+        <h2 id="philosophy-title">Product Philosophy</h2>
+        <blockquote>
+          <p>&quot;Write programs that do one thing and do it well.&quot;</p>
+          <cite>
+            M. Douglas McIlroy,{" "}
+            <Link href="https://inigomedina.co/library/work/mcilroy-unix-foreword">
+              UNIX Time-Sharing System: Foreword
+            </Link>
+          </cite>
+        </blockquote>
+      </section>
+
+      <section
+        className="ml-section ml-works-section"
+        id="products"
+        aria-labelledby="software-title"
+      >
+        <h2 id="software-title">Software</h2>
+        <div className="ml-alphabet-map">
+          {topParkingLetters && (
+            <span
+              className="ml-alpha-node ml-alpha-end-node is-start"
+              data-letters={topParkingLetters}
+              aria-label={`Potential software letters: ${topParkingLetters}`}
+              tabIndex={0}
+            />
+          )}
+          {alphabet.map((letter) => {
+            const letterWorks = works.filter((work) => work.mark === letter);
+            const hasWorks = letterWorks.length > 0;
+
+            return (
+              <div
+                className={`ml-alpha-row ${hasWorks ? "is-product" : "is-empty"}`}
+                key={letter}
+              >
+                <span className="ml-alpha-letter" aria-hidden="true">
+                  {letter}
                 </span>
-              </div>
-              <h2 className="font-hand text-4xl md:text-6xl text-black mb-4 md:mb-6 leading-tight">
-                Stablecoin financial ops for modern teams.
-              </h2>
-              <p className="text-base md:text-lg text-black/80 mb-6 md:mb-8 font-medium leading-relaxed">
-                Your funds stay in your Safe. Payments route through a CEX —
-                keeping on-chain movements private while remaining fully
-                compliant. Treasury, payroll, bonuses, and reimbursements — one tool.
-              </p>
-              <ul className="space-y-3 mb-8 md:mb-10">
-                <li className="flex items-start gap-3 text-sm md:text-base font-medium">
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                  Self-custody treasury with whitelist-only payouts
-                </li>
-                <li className="flex items-start gap-3 text-sm md:text-base font-medium">
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                  <span className="flex items-center gap-1.5 flex-wrap">
-                    Multi-CEX routing —
-                    <CexBadge name="OKX" />
-                    <CexBadge name="Kraken" />
-                    <CexBadge name="Coinbase" />
-                    <CexBadge name="Binance" />
-                  </span>
-                </li>
-                <li className="flex items-start gap-3 text-sm md:text-base font-medium">
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                  Complete audit trail, export-ready for your CPA
-                </li>
-              </ul>
-              <Link
-                href="/money"
-                className="btn-notion inline-block bg-black text-white px-7 md:px-8 py-3 md:py-4 rounded-md font-black hover:bg-black/80 uppercase tracking-wider text-sm"
-              >
-                Explore Motivation Money →
-              </Link>
-            </div>
-
-            {/* Right: screenshot stack */}
-            <div className="pt-4 pb-12 md:pb-10">
-              <ScreenshotStack />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Our Thesis ── */}
-      <section className="py-16 md:py-24 bg-white border-t-2 border-black border-b-2">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-10 md:gap-16">
-            <div className="md:col-span-1">
-              <div className="inline-block px-3 py-1 border-2 border-black text-[10px] font-black uppercase tracking-[0.2em] mb-4 md:mb-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                Our Thesis
-              </div>
-              <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-tight">
-                Motivation is infrastructure.
-              </h2>
-            </div>
-            <div className="md:col-span-2 grid grid-cols-2 gap-6 md:gap-10">
-              {[
-                {
-                  title: "AI-Native First",
-                  body: "Every product is designed to work with AI agents as first-class users — not bolted on after.",
-                },
-                {
-                  title: "Operational Depth",
-                  body: "We build tools that operators actually rely on. Not demos — production-grade from day one.",
-                },
-                {
-                  title: "Small & Focused",
-                  body: "One feature done completely beats ten features done halfway. We ship narrow and deep.",
-                },
-                {
-                  title: "Audit by Default",
-                  body: "Every meaningful action creates a record — who, what, why, when. Accountability is not optional.",
-                },
-              ].map((item) => (
-                <div key={item.title}>
-                  <h3 className="font-black mb-2 text-sm md:text-base">{item.title}</h3>
-                  <p className="text-xs md:text-sm text-notion-gray font-medium leading-relaxed">
-                    {item.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Coming Soon ── */}
-      <section className="py-16 md:py-24 bg-black" id="coming-soon">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="inline-block px-3 py-1 border border-white/30 text-white/60 text-[10px] font-black uppercase tracking-wider mb-6 md:mb-8">
-            What&apos;s Next
-          </div>
-          <h2 className="text-2xl md:text-4xl font-black tracking-tight text-white mb-10 md:mb-16">
-            Three more products in development.
-          </h2>
-          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-            {[
-              {
-                letter: "K",
-                color: "bg-amber-400",
-                name: "Motivate Kids",
-                tagline: "Nurture the builder's mindset.",
-                desc: "A behavior and mindset platform for parents and children ages 3–10. Turn daily effort into compounding growth.",
-                href: "/kids",
-              },
-              {
-                letter: "E",
-                color: "bg-blue-400",
-                name: "Motivate Me",
-                tagline: "Commitment through community.",
-                desc: "Personal habit-formation powered by social accountability. Because commitment made publicly is commitment kept.",
-                href: "/me",
-              },
-              {
-                letter: "T",
-                color: "bg-violet-400",
-                name: "Motivation Team",
-                tagline: "The backbone for modern teams.",
-                desc: "A central hub for onboarding, SaaS management, and API key governance — designed for lean human-agent teams.",
-                href: "/team",
-              },
-            ].map((product) => (
-              <Link
-                key={product.letter}
-                href={product.href}
-                className="block border border-white/10 bg-white/5 p-5 md:p-6 hover:bg-white/10 transition-colors group"
-              >
-                <div className="flex items-center justify-between mb-4 md:mb-6">
-                  <div
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 ${product.color} text-black text-[10px] font-black uppercase tracking-wider border-2 border-white/20`}
-                  >
-                    {product.letter} — {product.name.split(" ").pop()}
+                {!hasWorks && placeholderLetters.has(letter) && (
+                  <span
+                    className="ml-alpha-node"
+                    data-letters={placeholderLetters.get(letter)}
+                    aria-label={`Potential software letters: ${placeholderLetters.get(letter)}`}
+                    tabIndex={0}
+                  />
+                )}
+                {hasWorks ? (
+                  <div className="ml-alpha-products">
+                    {letterWorks.map((work) => (
+                      <Link
+                        className="ml-alpha-product"
+                        href={work.href}
+                        key={`${work.mark}-${work.name}`}
+                      >
+                        <strong>{work.name}</strong>
+                        <span>{work.description}</span>
+                      </Link>
+                    ))}
                   </div>
-                  <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">
-                    Soon
-                  </span>
-                </div>
-                <h3 className="font-hand text-xl md:text-2xl text-white mb-2 md:mb-3 leading-tight">
-                  {product.tagline}
-                </h3>
-                <p className="text-xs md:text-sm text-white/50 font-medium leading-relaxed mb-4 md:mb-6">
-                  {product.desc}
-                </p>
-                <span className="text-[10px] font-black text-white/30 group-hover:text-white/60 uppercase tracking-widest transition-colors">
-                  Learn more →
-                </span>
-              </Link>
-            ))}
-          </div>
+                ) : (
+                  <span className="ml-alpha-line" aria-hidden="true" />
+                )}
+              </div>
+            );
+          })}
+          {bottomParkingLetters && (
+            <span
+              className="ml-alpha-node ml-alpha-end-node is-end"
+              data-letters={bottomParkingLetters}
+              aria-label={`Potential software letters: ${bottomParkingLetters}`}
+              tabIndex={0}
+            />
+          )}
         </div>
       </section>
-    </>
+    </main>
   );
 }

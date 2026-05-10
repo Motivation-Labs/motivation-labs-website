@@ -10,8 +10,8 @@ export function organizationJsonLd() {
     url: BASE_URL,
     logo: `${BASE_URL}/logo.png`,
     description:
-      "Motivation Labs is a lean, AI-native software studio building tools for people who take their lives and work seriously — and for the AI agents that work alongside them.",
-    foundingDate: "2023",
+      "Motivation Labs is an independent home for software products built to help agents work with humans in harmony.",
+    foundingDate: "2026",
     address: {
       "@type": "PostalAddress",
       addressLocality: "San Francisco",
@@ -100,7 +100,7 @@ export function websiteJsonLd() {
     name: "Motivation Labs",
     url: BASE_URL,
     description:
-      "AI-native software studio building tools for people who take their lives and work seriously.",
+      "An independent home for software products built by a solo founder to serve a human-agent team.",
     publisher: organizationJsonLd(),
   };
 }

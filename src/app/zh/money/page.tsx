@@ -545,7 +545,7 @@ export default function ZhMoneyPage() {
 
           <div className="text-center">
             <Link
-              href="https://docs.motivationlabs.ai/zh/money/data-privacy"
+              href="https://docs.motivation.money/zh/money/data-privacy"
               className="text-sm font-black uppercase tracking-wider underline decoration-2 hover:text-black/70"
             >
               阅读完整的数据隐私与安全指南 →
@@ -811,7 +811,7 @@ export default function ZhMoneyPage() {
             <p className="text-sm text-notion-gray font-medium">
               无交易手续费。唯一的可变成本是交易所的提现费用（通常 $1–$10）。{" "}
               <Link
-                href="https://docs.motivationlabs.ai/zh/money/pricing"
+                href="https://docs.motivation.money/zh/money/pricing"
                 className="underline decoration-2 hover:text-black"
               >
                 查看完整定价详情 →

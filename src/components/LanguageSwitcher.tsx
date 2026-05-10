@@ -12,21 +12,11 @@ export default function LanguageSwitcher({ locale }: { locale: "en" | "zh" }) {
     : `/zh${pathname === "/" ? "" : pathname}`;
 
   return (
-    <div className="inline-flex items-center border-2 border-black text-[10px] font-black uppercase tracking-[0.15em] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-      <Link
-        href={isZh ? targetPath : pathname}
-        className={`px-2 py-1 transition-colors ${
-          !isZh ? "bg-black text-white" : "bg-white text-black hover:bg-gray-100"
-        }`}
-      >
+    <div className="ml-language-switcher">
+      <Link href={isZh ? targetPath : pathname} className={!isZh ? "is-active" : ""}>
         EN
       </Link>
-      <Link
-        href={isZh ? pathname : targetPath}
-        className={`px-2 py-1 transition-colors ${
-          isZh ? "bg-black text-white" : "bg-white text-black hover:bg-gray-100"
-        }`}
-      >
+      <Link href={isZh ? pathname : targetPath} className={isZh ? "is-active" : ""}>
         中文
       </Link>
     </div>

@@ -488,7 +488,7 @@ export default function MoneyPage() {
           </div>
 
           <div className="text-center">
-            <Link href="https://docs.motivationlabs.ai/money/data-privacy" className="text-sm font-black uppercase tracking-wider underline decoration-2 hover:text-black/70">Read the full Data Privacy & Security guide →</Link>
+            <Link href="https://docs.motivation.money/money/data-privacy" className="text-sm font-black uppercase tracking-wider underline decoration-2 hover:text-black/70">Read the full Data Privacy & Security guide →</Link>
           </div>
         </div>
       </section>
@@ -726,7 +726,7 @@ export default function MoneyPage() {
               No per-transaction fees. The only variable cost is your exchange&apos;s
               withdrawal fee (typically $1–$10).{" "}
               <Link
-                href="https://docs.motivationlabs.ai/money/pricing"
+                href="https://docs.motivation.money/money/pricing"
                 className="underline decoration-2 hover:text-black"
               >
                 Full pricing details →
