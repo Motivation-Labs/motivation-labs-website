@@ -1,8 +1,23 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./quiet.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/structured-data";
+
+const geistSans = localFont({
+  src: "../../node_modules/next/dist/next-devtools/server/font/geist-latin.woff2",
+  variable: "--font-geist-sans",
+  display: "swap",
+  weight: "100 900",
+});
+
+const geistMono = localFont({
+  src: "../../node_modules/next/dist/next-devtools/server/font/geist-mono-latin.woff2",
+  variable: "--font-geist-mono",
+  display: "swap",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://motivationlabs.ai"),
@@ -48,7 +63,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased selection:bg-gray-200">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased selection:bg-gray-200`}
+      >
         <GoogleAnalytics />
         <script
           type="application/ld+json"

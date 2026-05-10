@@ -5,9 +5,9 @@
   --color-notion-text: #1f211d;
   --color-notion-gray: #787774;
   --color-notion-border: #000000;
-  --font-sans: "Geist", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
-  --font-hand: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-geist-sans), "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  --font-hand: var(--font-geist-sans), "Avenir Next", "Helvetica Neue", Arial, sans-serif;
 }
 
 html {

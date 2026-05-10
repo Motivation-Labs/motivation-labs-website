@@ -1,0 +1,54 @@
+{
+  "updatedAtHongKong": "2026-05-10T23:52:01+08:00",
+  "rangeStartHongKong": "2026-04-27",
+  "rangeEndHongKong": "2026-05-11",
+  "records": [
+    {
+      "productSlug": "form",
+      "revenueUsdCents": 0,
+      "paidClientCount": 2,
+      "userCount": 3,
+      "outputUnitCount": 616
+    },
+    {
+      "productSlug": "money",
+      "revenueUsdCents": 6766,
+      "paidClientCount": 7,
+      "userCount": 58,
+      "outputUnitCount": 136
+    }
+  ],
+  "total": {
+    "productSlug": "total",
+    "revenueUsdCents": 6766,
+    "paidClientCount": 9,
+    "userCount": 61,
+    "outputUnitCount": 752
+  },
+  "steps": [
+    {
+      "step": "Step 01 Motivation Money",
+      "productSlug": "money",
+      "source": "supabase",
+      "revenueMode": "stripe_subscription_invoices"
+    },
+    {
+      "step": "Step 02 Motivation Form",
+      "productSlug": "form",
+      "source": "supabase",
+      "revenueMode": "stripe_payment_intents"
+    },
+    {
+      "step": "Step 03 Total",
+      "productSlug": "total",
+      "source": "sum(records)",
+      "record": {
+        "productSlug": "total",
+        "revenueUsdCents": 6766,
+        "paidClientCount": 9,
+        "userCount": 61,
+        "outputUnitCount": 752
+      }
+    }
+  ]
+}

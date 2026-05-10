@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { queryProductImpactSummary } from "@/lib/product-impact";
 
 type Work = {
   mark: string;
@@ -98,18 +99,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const impactSummary = await queryProductImpactSummary();
+
   return (
     <main className="ml-page">
+      <section className="ml-impact" aria-labelledby="impact-title">
+        <h2 id="impact-title">Impact</h2>
+        <dl>
+          {impactSummary.metrics.map((metric) => (
+            <div key={metric.label}>
+              <dt>{metric.label}</dt>
+              <dd>
+                {metric.value}
+                {metric.note && <span>{metric.note}</span>}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p>Aggregate statistics across Motivation Labs products.</p>
+        <p>Last updated {impactSummary.updatedAtLabel}.</p>
+      </section>
+
       <section className="ml-section" aria-labelledby="about-title">
         <h1 id="about-title">About</h1>
         <div className="ml-copy">
           <p>
-            Motivation Labs is an independent entity to house the software
-            products I build, mainly to serve{" "}
-            <Link href="https://inductive.network">our team</Link>&apos;s needs.
-            Our team&apos;s mission is to carry out the vision that agents work
-            with humans in harmony.
+            Motivation Labs is an independent entity for the software products I
+            build, mainly to serve the needs of{" "}
+            <Link href="https://inductive.network">our team</Link>, family, and
+            friends. Our team&apos;s mission is to carry out a vision of agents
+            working with humans in harmony.
           </p>
         </div>
       </section>
