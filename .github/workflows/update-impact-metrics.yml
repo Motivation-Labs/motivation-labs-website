@@ -12,6 +12,10 @@ on:
         description: "Exclusive end date, YYYY-MM-DD in Hong Kong time"
         required: false
 
+concurrency:
+  group: update-impact-metrics
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -59,11 +63,22 @@ jobs:
           npm run lint
           npm run build
 
-      - name: Rebase before commit
-        run: git pull --rebase origin main
+      - name: Commit and push metrics
+        run: |
+          cp src/data/product-impact-metrics.json /tmp/metrics-update.json
 
-      - name: Commit metrics snapshot
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update impact metrics"
-          file_pattern: src/data/product-impact-metrics.json
+          git fetch origin main
+          git reset --hard origin/main
+
+          cp /tmp/metrics-update.json src/data/product-impact-metrics.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add src/data/product-impact-metrics.json
+          if git diff --staged --quiet; then
+            echo "No changes to metrics — skipping commit"
+          else
+            git commit -m "chore: update impact metrics"
+            git push origin main
+          fi
