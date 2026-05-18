@@ -241,23 +241,25 @@ def query_stripe_payment_intent_revenue_usd_cents(stripe_secret_key: str) -> int
     while True:
         payload = query_stripe(
             stripe_secret_key,
-            "https://api.stripe.com/v1/payment_intents",
+            "https://api.stripe.com/v1/charges",
             {"limit": "100"},
             starting_after,
         )
 
-        payment_intents = payload.get("data", [])
-        for payment_intent in payment_intents:
-            if payment_intent.get("currency") != "usd":
+        charges = payload.get("data", [])
+        for charge in charges:
+            if charge.get("currency") != "usd":
                 continue
-            if payment_intent.get("status") != "succeeded":
+            if not charge.get("paid"):
                 continue
-            total += int(payment_intent.get("amount_received") or 0)
+            amount = int(charge.get("amount") or 0)
+            refunded = int(charge.get("amount_refunded") or 0)
+            total += amount - refunded
 
-        if not payload.get("has_more") or not payment_intents:
+        if not payload.get("has_more") or not charges:
             return total
 
-        starting_after = payment_intents[-1]["id"]
+        starting_after = charges[-1]["id"]
 
 
 def query_stripe(
