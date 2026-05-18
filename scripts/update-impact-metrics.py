@@ -35,7 +35,6 @@ class ProductStep:
     sql_file: str
     revenue_mode: RevenueMode
     stripe_secret_env: str | None = None
-    stripe_account_env: str | None = None
     fallback_database_url_env: str | None = None
     fallback_stripe_secret_env: str | None = None
 
@@ -49,7 +48,6 @@ PRODUCT_STEPS = [
         sql_file="scripts/sql/product-impact-money.sql",
         revenue_mode="stripe_payment_intents",
         stripe_secret_env="MONEY_STRIPE_SECRET_KEY",
-        stripe_account_env="MONEY_STRIPE_ACCOUNT_ID",
         fallback_stripe_secret_env="STRIPE_SECRET_KEY",
     ),
     ProductStep(
@@ -155,10 +153,9 @@ def query_product_step(step: ProductStep) -> dict[str, int | str | None]:
         step.stripe_secret_env,
         step.fallback_stripe_secret_env,
     )
-    stripe_account_id = env_value(step.stripe_account_env)
     if stripe_secret_key and step.revenue_mode == "stripe_payment_intents":
         record["revenueUsdCents"] = query_stripe_payment_intent_revenue_usd_cents(
-            stripe_secret_key, stripe_account_id
+            stripe_secret_key
         )
 
     return record
@@ -237,9 +234,7 @@ def calculate_totals(
     }
 
 
-def query_stripe_payment_intent_revenue_usd_cents(
-    stripe_secret_key: str, stripe_account_id: str | None = None
-) -> int:
+def query_stripe_payment_intent_revenue_usd_cents(stripe_secret_key: str) -> int:
     total = 0
     starting_after: str | None = None
 
@@ -249,7 +244,6 @@ def query_stripe_payment_intent_revenue_usd_cents(
             "https://api.stripe.com/v1/charges",
             {"limit": "100"},
             starting_after,
-            stripe_account_id,
         )
 
         charges = payload.get("data", [])
@@ -273,18 +267,13 @@ def query_stripe(
     url: str,
     params: dict[str, str],
     starting_after: str | None,
-    stripe_account_id: str | None = None,
 ) -> dict[str, Any]:
     if starting_after:
         params = {**params, "starting_after": starting_after}
 
-    headers = {"Authorization": f"Bearer {stripe_secret_key}"}
-    if stripe_account_id:
-        headers["Stripe-Account"] = stripe_account_id
-
     request = urllib.request.Request(
         url + "?" + urllib.parse.urlencode(params),
-        headers=headers,
+        headers={"Authorization": f"Bearer {stripe_secret_key}"},
     )
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.loads(response.read().decode("utf-8"))
