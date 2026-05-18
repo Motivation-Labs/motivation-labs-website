@@ -1,11 +1,11 @@
 {
-  "updatedAtHongKong": "2026-05-18T11:51:22+08:00",
+  "updatedAtHongKong": "2026-05-18T11:52:57+08:00",
   "rangeStartHongKong": "2026-05-11",
   "rangeEndHongKong": "2026-05-25",
   "records": [
     {
       "productSlug": "form",
-      "revenueUsdCents": 7164,
+      "revenueUsdCents": 0,
       "paidClientCount": 2,
       "userCount": 3,
       "outputUnitCount": 625
@@ -20,7 +20,7 @@
   ],
   "total": {
     "productSlug": "total",
-    "revenueUsdCents": 14328,
+    "revenueUsdCents": 7164,
     "paidClientCount": 9,
     "userCount": 61,
     "outputUnitCount": 934
@@ -36,7 +36,7 @@
       "step": "Step 02 Motivation Form",
       "productSlug": "form",
       "source": "supabase",
-      "revenueMode": "stripe_payment_intents"
+      "revenueMode": "none"
     },
     {
       "step": "Step 03 Total",
@@ -44,7 +44,7 @@
       "source": "sum(records)",
       "record": {
         "productSlug": "total",
-        "revenueUsdCents": 14328,
+        "revenueUsdCents": 7164,
         "paidClientCount": 9,
         "userCount": 61,
         "outputUnitCount": 934
