@@ -1,6 +1,6 @@
 select
   'money' as product_slug,
-  -- Revenue is computed by scripts/update-impact-metrics.py from Stripe paid subscription invoices.
+  -- Revenue is computed by scripts/update-impact-metrics.py from Stripe succeeded PaymentIntents.
   0 as revenue_usd_cents,
   (select count(*)::int from organizations) as paid_client_count,
   (select count(*)::int from users) as user_count,

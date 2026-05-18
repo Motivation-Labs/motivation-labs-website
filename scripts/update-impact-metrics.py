@@ -24,7 +24,7 @@ EXPECTED_COLUMNS = {
 HONG_KONG = ZoneInfo("Asia/Hong_Kong")
 
 
-RevenueMode = Literal["none", "stripe_subscription_invoices", "stripe_payment_intents"]
+RevenueMode = Literal["none", "stripe_payment_intents"]
 
 
 @dataclass(frozen=True)
@@ -153,11 +153,7 @@ def query_product_step(step: ProductStep) -> dict[str, int | str | None]:
         step.stripe_secret_env,
         step.fallback_stripe_secret_env,
     )
-    if stripe_secret_key and step.revenue_mode == "stripe_subscription_invoices":
-        record["revenueUsdCents"] = query_stripe_subscription_revenue_usd_cents(
-            stripe_secret_key
-        )
-    elif stripe_secret_key and step.revenue_mode == "stripe_payment_intents":
+    if stripe_secret_key and step.revenue_mode == "stripe_payment_intents":
         record["revenueUsdCents"] = query_stripe_payment_intent_revenue_usd_cents(
             stripe_secret_key
         )
@@ -236,30 +232,6 @@ def calculate_totals(
         "userCount": sum(int(record["userCount"]) for record in records),
         "outputUnitCount": output_units,
     }
-
-
-def query_stripe_subscription_revenue_usd_cents(stripe_secret_key: str) -> int:
-    total = 0
-    starting_after: str | None = None
-
-    while True:
-        payload = query_stripe(
-            stripe_secret_key,
-            "https://api.stripe.com/v1/invoices",
-            {"limit": "100", "status": "paid"},
-            starting_after,
-        )
-
-        invoices = payload.get("data", [])
-        for invoice in invoices:
-            if invoice.get("currency") != "usd":
-                continue
-            total += int(invoice.get("amount_paid") or 0)
-
-        if not payload.get("has_more") or not invoices:
-            return total
-
-        starting_after = invoices[-1]["id"]
 
 
 def query_stripe_payment_intent_revenue_usd_cents(stripe_secret_key: str) -> int:
