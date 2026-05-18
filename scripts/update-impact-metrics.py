@@ -36,7 +36,6 @@ class ProductStep:
     revenue_mode: RevenueMode
     stripe_secret_env: str | None = None
     fallback_database_url_env: str | None = None
-    fallback_stripe_secret_env: str | None = None
 
 
 PRODUCT_STEPS = [
@@ -47,8 +46,7 @@ PRODUCT_STEPS = [
         fallback_database_url_env="SUPABASE_DATABASE_URL",
         sql_file="scripts/sql/product-impact-money.sql",
         revenue_mode="stripe_payment_intents",
-        stripe_secret_env="MONEY_STRIPE_SECRET_KEY",
-        fallback_stripe_secret_env="STRIPE_SECRET_KEY",
+        stripe_secret_env="STRIPE_SECRET_KEY",
     ),
     ProductStep(
         label="Step 02 Motivation Form",
@@ -56,7 +54,7 @@ PRODUCT_STEPS = [
         database_url_env="FORM_SUPABASE_DATABASE_URL",
         sql_file="scripts/sql/product-impact-form.sql",
         revenue_mode="stripe_payment_intents",
-        stripe_secret_env="FORM_STRIPE_SECRET_KEY",
+        stripe_secret_env="STRIPE_SECRET_KEY",
     ),
 ]
 
@@ -149,10 +147,7 @@ def query_product_step(step: ProductStep) -> dict[str, int | str | None]:
             f"{step.sql_file} returned product_slug={record['productSlug']!r}, expected {step.slug!r}."
         )
 
-    stripe_secret_key = env_value(
-        step.stripe_secret_env,
-        step.fallback_stripe_secret_env,
-    )
+    stripe_secret_key = env_value(step.stripe_secret_env)
     if stripe_secret_key and step.revenue_mode == "stripe_payment_intents":
         record["revenueUsdCents"] = query_stripe_payment_intent_revenue_usd_cents(
             stripe_secret_key

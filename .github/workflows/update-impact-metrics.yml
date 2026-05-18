@@ -39,9 +39,6 @@ jobs:
         env:
           MONEY_SUPABASE_DATABASE_URL: ${{ secrets.MONEY_SUPABASE_DATABASE_URL }}
           FORM_SUPABASE_DATABASE_URL: ${{ secrets.FORM_SUPABASE_DATABASE_URL }}
-          MONEY_STRIPE_SECRET_KEY: ${{ secrets.MONEY_STRIPE_SECRET_KEY }}
-          FORM_STRIPE_SECRET_KEY: ${{ secrets.FORM_STRIPE_SECRET_KEY }}
-          SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           METRICS_RANGE_START: ${{ inputs.range_start }}
           METRICS_RANGE_END: ${{ inputs.range_end }}
