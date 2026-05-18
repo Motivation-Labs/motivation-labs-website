@@ -256,7 +256,7 @@ def query_stripe_payment_intent_revenue_usd_cents(
         for charge in charges:
             if charge.get("currency") != "usd":
                 continue
-            if not charge.get("paid"):
+            if charge.get("status") != "succeeded":
                 continue
             amount = int(charge.get("amount") or 0)
             refunded = int(charge.get("amount_refunded") or 0)
