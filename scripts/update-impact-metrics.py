@@ -46,7 +46,7 @@ PRODUCT_STEPS = [
         database_url_env="MONEY_SUPABASE_DATABASE_URL",
         fallback_database_url_env="SUPABASE_DATABASE_URL",
         sql_file="scripts/sql/product-impact-money.sql",
-        revenue_mode="stripe_subscription_invoices",
+        revenue_mode="stripe_payment_intents",
         stripe_secret_env="MONEY_STRIPE_SECRET_KEY",
         fallback_stripe_secret_env="STRIPE_SECRET_KEY",
     ),
