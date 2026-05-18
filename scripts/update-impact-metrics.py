@@ -241,11 +241,6 @@ def calculate_totals(
 def query_stripe_subscription_revenue_usd_cents(stripe_secret_key: str) -> int:
     total = 0
     starting_after: str | None = None
-    subscription_reasons = {
-        "subscription_create",
-        "subscription_cycle",
-        "subscription_update",
-    }
 
     while True:
         payload = query_stripe(
@@ -258,8 +253,6 @@ def query_stripe_subscription_revenue_usd_cents(stripe_secret_key: str) -> int:
         invoices = payload.get("data", [])
         for invoice in invoices:
             if invoice.get("currency") != "usd":
-                continue
-            if invoice.get("billing_reason") not in subscription_reasons:
                 continue
             total += int(invoice.get("amount_paid") or 0)
 
