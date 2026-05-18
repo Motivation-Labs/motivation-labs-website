@@ -1,5 +1,5 @@
 {
-  "updatedAtHongKong": "2026-05-18T09:51:11+08:00",
+  "updatedAtHongKong": "2026-05-18T09:53:33+08:00",
   "rangeStartHongKong": "2026-05-11",
   "rangeEndHongKong": "2026-05-25",
   "records": [
@@ -30,7 +30,7 @@
       "step": "Step 01 Motivation Money",
       "productSlug": "money",
       "source": "supabase",
-      "revenueMode": "stripe_subscription_invoices"
+      "revenueMode": "stripe_payment_intents"
     },
     {
       "step": "Step 02 Motivation Form",
