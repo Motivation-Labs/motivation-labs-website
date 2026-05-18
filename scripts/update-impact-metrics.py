@@ -53,8 +53,7 @@ PRODUCT_STEPS = [
         slug="form",
         database_url_env="FORM_SUPABASE_DATABASE_URL",
         sql_file="scripts/sql/product-impact-form.sql",
-        revenue_mode="stripe_payment_intents",
-        stripe_secret_env="STRIPE_SECRET_KEY",
+        revenue_mode="none",
     ),
 ]
 
